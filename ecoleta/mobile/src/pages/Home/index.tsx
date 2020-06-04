@@ -19,7 +19,10 @@ const Home = () => {
   const navigation = useNavigation();
 
   function handleNavigateToPoints() {
-    navigation.navigate('Points');
+    navigation.navigate('Points', {
+      uf: selectedUF,
+      city: selectedCity,
+    });
   }
 
   const [ufs, setUfs] = useState<string[]>([]);
