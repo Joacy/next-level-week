@@ -1,8 +1,19 @@
-import React from 'react';
+import React, { useState, useEffect, ChangeEvent } from 'react';
 import { Feather } from '@expo/vector-icons';
 import { StyleSheet, Text, View, Image, ImageBackground } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
+import RNPickerSelect from 'react-native-picker-select';
+
+import axios from 'axios';
+
+interface IBGEUFResponse {
+  sigla: string,
+};
+
+interface IBGECityResponse {
+  nome: string,
+};
 
 const Home = () => {
   const navigation = useNavigation();
@@ -10,6 +21,52 @@ const Home = () => {
   function handleNavigateToPoints() {
     navigation.navigate('Points');
   }
+
+  const [ufs, setUfs] = useState<string[]>([]);
+
+  async function getUFs() {
+    try {
+      const response = await axios.get<IBGEUFResponse[]>("https://servicodados.ibge.gov.br/api/v1/localidades/estados");
+
+      const initials = response.data.map(uf => uf.sigla);
+
+      setUfs(initials);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getUFs();
+  }, []);
+
+  const [selectedUF, setSelectedUF] = useState('0');
+
+  function handleSelectUF(e: ChangeEvent<HTMLSelectElement>) {
+    setSelectedUF(e.target.value);
+  };
+
+  const [selectedCity, setSelectedCity] = useState('0');
+
+  function handleSelectCity(e: ChangeEvent<HTMLSelectElement>) {
+    setSelectedCity(e.target.value);
+  };
+
+  const [cities, setCities] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (selectedUF === '0') {
+      return;
+    }
+
+    axios
+      .get<IBGECityResponse[]>(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${selectedUF}/municipios`)
+      .then(response => {
+        const names = response.data.map(city => city.nome);
+
+        setCities(names);
+      });
+  }, [selectedUF]);
 
   return (
     <ImageBackground

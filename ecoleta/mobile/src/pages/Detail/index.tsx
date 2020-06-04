@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Feather, FontAwesome } from '@expo/vector-icons';
-import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView, Image } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView, Image, Linking } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
 import Constants from 'expo-constants';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import * as MailComposer from 'expo-mail-composer';
 
 import api from '../../services/api';
 
@@ -54,7 +55,18 @@ const Detail = () => {
 
   if (!data.point) {
     return null;
-  }
+  };
+
+  function handleWhatsapp() {
+    Linking.openURL(`whatsapp://send?phone=${data.point.whatsapp}&text=Tenho interesse na coleta de resíduos`);
+  };
+
+  function handleComposeMail() {
+    MailComposer.composeAsync({
+      subject: 'Interesse na coleta de resíduos',
+      recipients: [data.point.email],
+    });
+  };
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -82,7 +94,7 @@ const Detail = () => {
       <View style={styles.footer}>
         <RectButton
           style={styles.button}
-          onPress={() => { }}
+          onPress={handleWhatsapp}
         >
           <FontAwesome name="whatsapp" color="#fff" size={20} />
           <Text style={styles.buttonText}>Whatsapp</Text>
@@ -90,7 +102,7 @@ const Detail = () => {
 
         <RectButton
           style={styles.button}
-          onPress={() => { }}
+          onPress={handleComposeMail}
         >
           <Feather name="mail" color="#fff" size={20} />
           <Text style={styles.buttonText}>E-mail</Text>
