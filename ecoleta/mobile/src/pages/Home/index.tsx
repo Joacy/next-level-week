@@ -93,6 +93,38 @@ const Home = () => {
       </View>
 
       <View style={styles.footer}>
+        <RNPickerSelect
+          placeholder={{
+            label: 'Selecione o estado',
+            value: null,
+          }}
+          items={ufs.map(uf => (
+            { label: uf, value: uf }
+          ))}
+          onValueChange={
+            (value) => setSelectedUF(value)
+          }
+          style={pickerStyle}
+          useNativeAndroidPickerStyle={false}
+          value={selectedUF}
+        />
+
+        <RNPickerSelect
+          placeholder={{
+            label: 'Selecione a cidade',
+            value: null,
+          }}
+          items={cities.map(city => (
+            { label: city, value: city }
+          ))}
+          onValueChange={
+            (value) => setSelectedCity(value)
+          }
+          style={pickerStyle}
+          useNativeAndroidPickerStyle={false}
+          value={selectedCity}
+        />
+
         <RectButton style={styles.button} onPress={handleNavigateToPoints}>
           <View style={styles.buttonIcon}>
             <Text>
@@ -141,15 +173,6 @@ const styles = StyleSheet.create({
 
   select: {},
 
-  input: {
-    height: 60,
-    backgroundColor: '#FFF',
-    borderRadius: 10,
-    marginBottom: 8,
-    paddingHorizontal: 24,
-    fontSize: 16,
-  },
-
   button: {
     backgroundColor: '#34CB79',
     height: 60,
@@ -179,5 +202,24 @@ const styles = StyleSheet.create({
     fontSize: 16,
   }
 });
+
+const pickerStyle = {
+  inputIOS: {
+    height: 60,
+    backgroundColor: '#FFF',
+    borderRadius: 10,
+    marginBottom: 8,
+    paddingHorizontal: 24,
+    fontSize: 16,
+  },
+  inputAndroid: {
+    height: 60,
+    backgroundColor: '#FFF',
+    borderRadius: 10,
+    marginBottom: 8,
+    paddingHorizontal: 24,
+    fontSize: 16,
+  },
+};
 
 export default Home;
