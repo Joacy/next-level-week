@@ -20,7 +20,7 @@ class PointsController {
         const serializediPoints = points.map(point => {
             return {
                 ...point,
-                image_url: `http://192.168.1.102:3333/uploads/${point.image}`,
+                image_url: `http://192.168.1.101:3333/uploads/${point.image}`,
             };
         });
 
@@ -38,7 +38,7 @@ class PointsController {
 
         const serializediPoint = {
             ...point,
-            image_url: `http://192.168.1.102:3333/uploads/${point.image}`,
+            image_url: `http://192.168.1.101:3333/uploads/${point.image}`,
         };
 
         const items = await knex('items')
